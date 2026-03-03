@@ -14,7 +14,104 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      apps: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          developer: string
+          downloads: number
+          featured: boolean
+          icon: string
+          id: string
+          long_description: string
+          name: string
+          rating: number
+          screenshots: string[]
+          size: string
+          tags: string[]
+          updated_at: string
+          use_type: string
+          use_url: string
+          version: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description: string
+          developer: string
+          downloads?: number
+          featured?: boolean
+          icon: string
+          id: string
+          long_description: string
+          name: string
+          rating?: number
+          screenshots?: string[]
+          size?: string
+          tags?: string[]
+          updated_at?: string
+          use_type: string
+          use_url: string
+          version?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          developer?: string
+          downloads?: number
+          featured?: boolean
+          icon?: string
+          id?: string
+          long_description?: string
+          name?: string
+          rating?: number
+          screenshots?: string[]
+          size?: string
+          tags?: string[]
+          updated_at?: string
+          use_type?: string
+          use_url?: string
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "apps_category_fkey"
+            columns: ["category"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      categories: {
+        Row: {
+          count: number
+          created_at: string
+          description: string
+          icon: string
+          id: string
+          name: string
+        }
+        Insert: {
+          count?: number
+          created_at?: string
+          description: string
+          icon: string
+          id: string
+          name: string
+        }
+        Update: {
+          count?: number
+          created_at?: string
+          description?: string
+          icon?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
