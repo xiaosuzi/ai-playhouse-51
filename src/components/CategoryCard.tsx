@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import type { AppCategory } from "@/data/apps";
+import type { CategoryRow } from "@/hooks/use-apps";
 
 interface CategoryCardProps {
-  category: AppCategory;
+  category: CategoryRow;
 }
 
 export function CategoryCard({ category }: CategoryCardProps) {
