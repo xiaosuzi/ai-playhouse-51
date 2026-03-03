@@ -2,12 +2,23 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Star, Download, ExternalLink, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { getAppById, formatDownloads } from "@/data/apps";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useApp, formatDownloads } from "@/hooks/use-apps";
 
 export default function AppDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const app = id ? getAppById(id) : undefined;
+  const { data: app, isLoading } = useApp(id);
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 md:px-6 py-6 max-w-3xl space-y-6">
+        <Skeleton className="h-8 w-20" />
+        <Skeleton className="h-48 rounded-2xl" />
+        <Skeleton className="h-32 rounded-2xl" />
+      </div>
+    );
+  }
 
   if (!app) {
     return (
@@ -19,8 +30,8 @@ export default function AppDetail() {
   }
 
   const handleUse = () => {
-    if (app.useType === 'external') {
-      window.open(app.useUrl, '_blank');
+    if (app.use_type === 'external') {
+      window.open(app.use_url, '_blank');
     } else {
       navigate(`/app/${app.id}/use`);
     }
@@ -32,7 +43,6 @@ export default function AppDetail() {
         <ArrowLeft className="h-4 w-4" /> 返回
       </Link>
 
-      {/* App Header */}
       <div className="glass rounded-2xl p-6 md:p-8 mb-6">
         <div className="flex items-start gap-5">
           <div className="text-5xl w-20 h-20 rounded-2xl bg-secondary flex items-center justify-center flex-shrink-0">
@@ -54,10 +64,9 @@ export default function AppDetail() {
           </div>
         </div>
 
-        {/* Action buttons */}
         <div className="flex gap-3 mt-6">
           <Button onClick={handleUse} className="flex-1 gradient-bg text-primary-foreground gap-2 hover:opacity-90">
-            {app.useType === 'external' ? <ExternalLink className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+            {app.use_type === 'external' ? <ExternalLink className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             在线使用
           </Button>
           <Button variant="outline" className="flex-1 gap-2">
@@ -67,10 +76,9 @@ export default function AppDetail() {
         </div>
       </div>
 
-      {/* Description */}
       <div className="glass rounded-2xl p-6 mb-6">
         <h2 className="font-semibold mb-3 font-['Space_Grotesk']">应用介绍</h2>
-        <p className="text-sm text-muted-foreground leading-relaxed">{app.longDescription}</p>
+        <p className="text-sm text-muted-foreground leading-relaxed">{app.long_description}</p>
         <div className="flex gap-2 mt-4 flex-wrap">
           {app.tags.map((tag) => (
             <Badge key={tag} variant="secondary">{tag}</Badge>
@@ -78,7 +86,6 @@ export default function AppDetail() {
         </div>
       </div>
 
-      {/* Info */}
       <div className="glass rounded-2xl p-6">
         <h2 className="font-semibold mb-3 font-['Space_Grotesk']">应用信息</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
@@ -86,7 +93,7 @@ export default function AppDetail() {
             { label: '版本', value: app.version },
             { label: '大小', value: app.size },
             { label: '开发者', value: app.developer },
-            { label: '使用方式', value: app.useType === 'iframe' ? '在线内嵌' : '外链跳转' },
+            { label: '使用方式', value: app.use_type === 'iframe' ? '在线内嵌' : '外链跳转' },
           ].map((info) => (
             <div key={info.label}>
               <p className="text-muted-foreground text-xs">{info.label}</p>

@@ -1,13 +1,14 @@
 import { useSearchParams, Link } from "react-router-dom";
 import { ArrowLeft, SearchX } from "lucide-react";
 import { AppCard } from "@/components/AppCard";
-import { searchApps } from "@/data/apps";
+import { useSearchApps } from "@/hooks/use-apps";
 import { SearchBar } from "@/components/SearchBar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SearchPage() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
-  const results = query ? searchApps(query) : [];
+  const { data: results = [], isLoading } = useSearchApps(query);
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-6">
@@ -32,18 +33,24 @@ export default function SearchPage() {
         </div>
       )}
 
-      {query && results.length === 0 && (
+      {query && !isLoading && results.length === 0 && (
         <div className="text-center py-20 text-muted-foreground">
           <SearchX className="h-12 w-12 mx-auto mb-4 opacity-50" />
           <p>未找到相关应用，换个关键词试试</p>
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {results.map((app) => (
-          <AppCard key={app.id} app={app} />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-32 rounded-xl" />)}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {results.map((app) => (
+            <AppCard key={app.id} app={app} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

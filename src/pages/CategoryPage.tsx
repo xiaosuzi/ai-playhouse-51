@@ -1,13 +1,15 @@
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { AppCard } from "@/components/AppCard";
-import { getAppsByCategory, getCategoryById, categories } from "@/data/apps";
+import { useCategories, useAppsByCategory } from "@/hooks/use-apps";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 export default function CategoryPage() {
   const { id } = useParams<{ id: string }>();
-  const category = id ? getCategoryById(id) : undefined;
-  const appsInCategory = id ? getAppsByCategory(id) : [];
+  const { data: categories = [] } = useCategories();
+  const { data: appsInCategory = [], isLoading } = useAppsByCategory(id);
+  const category = categories.find((c) => c.id === id);
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-6">
@@ -15,7 +17,6 @@ export default function CategoryPage() {
         <ArrowLeft className="h-4 w-4" /> 返回首页
       </Link>
 
-      {/* Category tabs */}
       <div className="flex gap-2 overflow-x-auto pb-4 mb-6 scrollbar-hide">
         {categories.map((cat) => (
           <Link
@@ -42,13 +43,19 @@ export default function CategoryPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {appsInCategory.map((app) => (
-          <AppCard key={app.id} app={app} />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-32 rounded-xl" />)}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {appsInCategory.map((app) => (
+            <AppCard key={app.id} app={app} />
+          ))}
+        </div>
+      )}
 
-      {appsInCategory.length === 0 && (
+      {!isLoading && appsInCategory.length === 0 && (
         <div className="text-center py-20 text-muted-foreground">
           该分类暂无应用
         </div>

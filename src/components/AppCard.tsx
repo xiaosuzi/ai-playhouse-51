@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { Star, Download } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import type { AIApp } from "@/data/apps";
-import { formatDownloads } from "@/data/apps";
+import type { AppRow } from "@/hooks/use-apps";
+import { formatDownloads } from "@/hooks/use-apps";
 
 interface AppCardProps {
-  app: AIApp;
+  app: AppRow;
 }
 
 export function AppCard({ app }: AppCardProps) {
