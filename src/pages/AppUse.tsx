@@ -1,10 +1,18 @@
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { getAppById } from "@/data/apps";
+import { useApp } from "@/hooks/use-apps";
 
 export default function AppUse() {
   const { id } = useParams<{ id: string }>();
-  const app = id ? getAppById(id) : undefined;
+  const { data: app, isLoading } = useApp(id);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen text-muted-foreground">
+        加载中...
+      </div>
+    );
+  }
 
   if (!app) {
     return (
@@ -16,7 +24,6 @@ export default function AppUse() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)] md:h-[calc(100vh-4rem)]">
-      {/* Top bar */}
       <div className="glass border-b border-border/50 px-4 py-3 flex items-center gap-3 flex-shrink-0">
         <Link to={`/app/${app.id}`} className="text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-5 w-5" />
@@ -25,10 +32,9 @@ export default function AppUse() {
         <span className="font-semibold truncate">{app.name}</span>
       </div>
 
-      {/* iframe */}
       <div className="flex-1 bg-secondary/30">
         <iframe
-          src={app.useUrl}
+          src={app.use_url}
           title={app.name}
           className="w-full h-full border-0"
           sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
