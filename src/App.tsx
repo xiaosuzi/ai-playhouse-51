@@ -11,6 +11,9 @@ import AppDetail from "./pages/AppDetail";
 import AppUse from "./pages/AppUse";
 import SearchPage from "./pages/SearchPage";
 import NotFound from "./pages/NotFound";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
+import { AdminRoute } from "./components/AdminRoute";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +32,8 @@ const App = () => (
             <Route path="/search" element={<SearchPage />} />
           </Route>
           <Route path="/app/:id/use" element={<AppUse />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
