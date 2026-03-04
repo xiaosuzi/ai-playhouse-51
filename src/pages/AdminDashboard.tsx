@@ -95,14 +95,13 @@ export default function AdminDashboard() {
   };
 
   const handleSave = async () => {
-    if (!form.id || !form.name || !form.category) {
+    if (!form.name || !form.category) {
       toast({ title: "请填写必填字段", variant: "destructive" });
       return;
     }
     setSaving(true);
 
-    const payload = {
-      id: form.id,
+    const payload: Record<string, unknown> = {
       name: form.name,
       description: form.description,
       long_description: form.long_description,
@@ -123,7 +122,7 @@ export default function AdminDashboard() {
     if (editing) {
       ({ error } = await supabase.from("apps").update(payload).eq("id", form.id));
     } else {
-      ({ error } = await supabase.from("apps").insert(payload));
+      ({ error } = await supabase.from("apps").insert(payload as any));
     }
 
     setSaving(false);
@@ -277,15 +276,9 @@ export default function AdminDashboard() {
             <DialogTitle>{editing ? "编辑应用" : "新增应用"}</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-2">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <label className="text-sm font-medium">ID *</label>
-                <Input value={form.id} onChange={(e) => updateField("id", e.target.value)} disabled={editing} placeholder="my-app" />
-              </div>
-              <div className="space-y-1">
-                <label className="text-sm font-medium">名称 *</label>
-                <Input value={form.name} onChange={(e) => updateField("name", e.target.value)} placeholder="我的应用" />
-              </div>
+            <div className="space-y-1">
+              <label className="text-sm font-medium">名称 *</label>
+              <Input value={form.name} onChange={(e) => updateField("name", e.target.value)} placeholder="我的应用" />
             </div>
             <div className="space-y-1">
               <label className="text-sm font-medium">简介</label>
