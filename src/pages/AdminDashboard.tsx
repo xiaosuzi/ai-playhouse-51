@@ -208,67 +208,80 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
-        {/* Apps Table */}
-        <Card className="glass">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>应用管理</CardTitle>
-            <Button size="sm" className="gradient-bg" onClick={openCreate}>
-              <Plus className="w-4 h-4 mr-1" />
-              新增应用
-            </Button>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <p className="text-center text-muted-foreground py-8">加载中...</p>
-            ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>应用</TableHead>
-                      <TableHead className="hidden md:table-cell">分类</TableHead>
-                      <TableHead className="hidden md:table-cell">评分</TableHead>
-                      <TableHead className="hidden md:table-cell">推荐</TableHead>
-                      <TableHead className="text-right">操作</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {apps.map((app) => (
-                      <TableRow key={app.id}>
-                        <TableCell>
-                          <div className="flex items-center gap-3">
-                            <span className="text-2xl">{app.icon}</span>
-                            <div>
-                              <p className="font-medium text-foreground">{app.name}</p>
-                              <p className="text-xs text-muted-foreground line-clamp-1">{app.description}</p>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          <Badge variant="secondary">{app.category}</Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">{app.rating}</TableCell>
-                        <TableCell className="hidden md:table-cell">
-                          {app.featured && <Badge className="gradient-bg">推荐</Badge>}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex justify-end gap-1">
-                            <Button variant="ghost" size="icon" onClick={() => openEdit(app)}>
-                              <Pencil className="w-4 h-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon" onClick={() => setDeleteId(app.id)}>
-                              <Trash2 className="w-4 h-4 text-destructive" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        {/* Tabs */}
+        <Tabs defaultValue="apps" className="space-y-4">
+          <TabsList>
+            <TabsTrigger value="apps">应用管理</TabsTrigger>
+            <TabsTrigger value="categories">分类管理</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="apps">
+            <Card className="glass">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>应用管理</CardTitle>
+                <Button size="sm" className="gradient-bg" onClick={openCreate}>
+                  <Plus className="w-4 h-4 mr-1" />
+                  新增应用
+                </Button>
+              </CardHeader>
+              <CardContent>
+                {isLoading ? (
+                  <p className="text-center text-muted-foreground py-8">加载中...</p>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>应用</TableHead>
+                          <TableHead className="hidden md:table-cell">分类</TableHead>
+                          <TableHead className="hidden md:table-cell">评分</TableHead>
+                          <TableHead className="hidden md:table-cell">推荐</TableHead>
+                          <TableHead className="text-right">操作</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {apps.map((app) => (
+                          <TableRow key={app.id}>
+                            <TableCell>
+                              <div className="flex items-center gap-3">
+                                <span className="text-2xl">{app.icon}</span>
+                                <div>
+                                  <p className="font-medium text-foreground">{app.name}</p>
+                                  <p className="text-xs text-muted-foreground line-clamp-1">{app.description}</p>
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell className="hidden md:table-cell">
+                              <Badge variant="secondary">{app.category}</Badge>
+                            </TableCell>
+                            <TableCell className="hidden md:table-cell">{app.rating}</TableCell>
+                            <TableCell className="hidden md:table-cell">
+                              {app.featured && <Badge className="gradient-bg">推荐</Badge>}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex justify-end gap-1">
+                                <Button variant="ghost" size="icon" onClick={() => openEdit(app)}>
+                                  <Pencil className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" onClick={() => setDeleteId(app.id)}>
+                                  <Trash2 className="w-4 h-4 text-destructive" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="categories">
+            <CategoryManagement />
+          </TabsContent>
+        </Tabs>
       </main>
 
       {/* Create/Edit Dialog */}
