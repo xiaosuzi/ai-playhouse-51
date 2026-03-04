@@ -29,6 +29,7 @@ export type Database = {
           rating: number
           screenshots: string[]
           size: string
+          sort_order: number
           tags: string[]
           updated_at: string
           use_type: string
@@ -43,12 +44,13 @@ export type Database = {
           downloads?: number
           featured?: boolean
           icon: string
-          id: string
+          id?: string
           long_description: string
           name: string
           rating?: number
           screenshots?: string[]
           size?: string
+          sort_order?: number
           tags?: string[]
           updated_at?: string
           use_type: string
@@ -69,6 +71,7 @@ export type Database = {
           rating?: number
           screenshots?: string[]
           size?: string
+          sort_order?: number
           tags?: string[]
           updated_at?: string
           use_type?: string
@@ -93,14 +96,16 @@ export type Database = {
           icon: string
           id: string
           name: string
+          sort_order: number
         }
         Insert: {
           count?: number
           created_at?: string
           description: string
           icon: string
-          id: string
+          id?: string
           name: string
+          sort_order?: number
         }
         Update: {
           count?: number
@@ -109,6 +114,7 @@ export type Database = {
           icon?: string
           id?: string
           name?: string
+          sort_order?: number
         }
         Relationships: []
       }
