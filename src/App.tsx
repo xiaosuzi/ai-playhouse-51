@@ -11,6 +11,9 @@ import AppDetail from "./pages/AppDetail";
 import AppUse from "./pages/AppUse";
 import SearchPage from "./pages/SearchPage";
 import NotFound from "./pages/NotFound";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
+import { AdminRoute } from "./components/AdminRoute";
 
 const queryClient = new QueryClient();
 
