@@ -34,7 +34,8 @@ export function useFeaturedApps() {
       const { data, error } = await supabase
         .from("apps")
         .select("*")
-        .eq("featured", true);
+        .eq("featured", true)
+        .order("sort_order", { ascending: true });
       if (error) throw error;
       return data as AppRow[];
     },
