@@ -134,8 +134,9 @@ export default function CategoryManagement() {
                   <TableRow>
                     <TableHead>分类</TableHead>
                     <TableHead className="hidden md:table-cell">描述</TableHead>
-                    <TableHead className="hidden md:table-cell">应用数</TableHead>
-                    <TableHead className="text-right">操作</TableHead>
+                     <TableHead className="hidden md:table-cell">应用数</TableHead>
+                     <TableHead>排序</TableHead>
+                     <TableHead className="text-right">操作</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
