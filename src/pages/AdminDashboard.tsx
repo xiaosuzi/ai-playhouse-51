@@ -250,6 +250,7 @@ export default function AdminDashboard() {
                           <TableHead className="hidden md:table-cell">分类</TableHead>
                           <TableHead className="hidden md:table-cell">评分</TableHead>
                           <TableHead className="hidden md:table-cell">推荐</TableHead>
+                          <TableHead>排序</TableHead>
                           <TableHead className="text-right">操作</TableHead>
                         </TableRow>
                       </TableHeader>
