@@ -255,7 +255,7 @@ export default function AdminDashboard() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {apps.map((app) => (
+                        {apps.map((app, appIndex) => (
                           <TableRow key={app.id}>
                             <TableCell>
                               <div className="flex items-center gap-3">
