@@ -20,7 +20,7 @@ export function useApps() {
   return useQuery({
     queryKey: ["apps"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("apps").select("*");
+      const { data, error } = await supabase.from("apps").select("*").order("sort_order", { ascending: true });
       if (error) throw error;
       return data as AppRow[];
     },
