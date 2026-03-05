@@ -17,6 +17,8 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Pencil, Trash2, LogOut, LayoutDashboard } from "lucide-react";
+import SortControls from "@/components/SortControls";
+import { reorderItems } from "@/lib/reorder";
 import CategoryManagement from "@/components/CategoryManagement";
 import {
   AlertDialog,
