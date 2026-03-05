@@ -140,7 +140,7 @@ export default function CategoryManagement() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {categories.map((cat) => (
+                  {categories.map((cat, catIndex) => (
                     <TableRow key={cat.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
