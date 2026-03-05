@@ -29,16 +29,15 @@ export async function reorderItems(
 
   sorted.splice(newIndex, 0, item);
 
-  // Batch update sort_order for affected items
-  const updates = sorted.map((it, i) => ({ id: it.id, sort_order: i }));
+  const ids = sorted.map((it) => it.id);
+  const sortOrders = sorted.map((_, i) => i);
 
-  for (const u of updates) {
-    const { error } = await supabase
-      .from(table)
-      .update({ sort_order: u.sort_order } as any)
-      .eq("id", u.id);
-    if (error) return { error: error.message };
-  }
+  const { error } = await supabase.rpc("batch_update_sort_order", {
+    p_table: table,
+    p_ids: ids,
+    p_sort_orders: sortOrders,
+  });
 
+  if (error) return { error: error.message };
   return {};
 }

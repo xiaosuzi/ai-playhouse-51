@@ -141,6 +141,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      batch_update_sort_order: {
+        Args: { p_ids: string[]; p_sort_orders: number[]; p_table: string }
+        Returns: undefined
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
