@@ -49,7 +49,8 @@ export function useAppsByCategory(categoryId: string | undefined) {
       const { data, error } = await supabase
         .from("apps")
         .select("*")
-        .eq("category", categoryId!);
+        .eq("category", categoryId!)
+        .order("sort_order", { ascending: true });
       if (error) throw error;
       return data as AppRow[];
     },
