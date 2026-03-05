@@ -44,8 +44,20 @@ export default function CategoryManagement() {
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState<CategoryFormData>(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [sorting, setSorting] = useState(false);
   const queryClient = useQueryClient();
   const { toast } = useToast();
+
+  const handleSort = async (index: number, direction: "up" | "down" | "top" | "bottom") => {
+    setSorting(true);
+    const { error } = await reorderItems("categories", categories.map(c => ({ id: c.id, sort_order: c.sort_order })), index, direction);
+    setSorting(false);
+    if (error) {
+      toast({ title: "排序失败", description: error, variant: "destructive" });
+    } else {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+    }
+  };
 
   const openCreate = () => {
     setEditing(false);
