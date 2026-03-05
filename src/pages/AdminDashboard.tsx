@@ -273,6 +273,14 @@ export default function AdminDashboard() {
                             <TableCell className="hidden md:table-cell">
                               {app.featured && <Badge className="gradient-bg">推荐</Badge>}
                             </TableCell>
+                            <TableCell>
+                              <SortControls
+                                index={appIndex}
+                                total={apps.length}
+                                disabled={sorting}
+                                onMove={(dir) => handleAppSort(appIndex, dir)}
+                              />
+                            </TableCell>
                             <TableCell className="text-right">
                               <div className="flex justify-end gap-1">
                                 <Button variant="ghost" size="icon" onClick={() => openEdit(app)}>
