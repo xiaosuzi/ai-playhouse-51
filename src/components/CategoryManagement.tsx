@@ -152,6 +152,14 @@ export default function CategoryManagement() {
                         {cat.description}
                       </TableCell>
                       <TableCell className="hidden md:table-cell">{cat.count}</TableCell>
+                      <TableCell>
+                        <SortControls
+                          index={catIndex}
+                          total={categories.length}
+                          disabled={sorting}
+                          onMove={(dir) => handleSort(catIndex, dir)}
+                        />
+                      </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-1">
                           <Button variant="ghost" size="icon" onClick={() => openEdit(cat)}>
