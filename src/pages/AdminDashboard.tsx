@@ -17,6 +17,8 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Pencil, Trash2, LogOut, LayoutDashboard } from "lucide-react";
+import SortControls from "@/components/SortControls";
+import { reorderItems } from "@/lib/reorder";
 import CategoryManagement from "@/components/CategoryManagement";
 import {
   AlertDialog,
@@ -80,9 +82,21 @@ export default function AdminDashboard() {
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState<AppFormData>(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [sorting, setSorting] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const handleAppSort = async (index: number, direction: "up" | "down" | "top" | "bottom") => {
+    setSorting(true);
+    const { error } = await reorderItems("apps", apps.map(a => ({ id: a.id, sort_order: a.sort_order })), index, direction);
+    setSorting(false);
+    if (error) {
+      toast({ title: "排序失败", description: error, variant: "destructive" });
+    } else {
+      queryClient.invalidateQueries({ queryKey: ["apps"] });
+    }
+  };
 
   const openCreate = () => {
     setEditing(false);
@@ -236,11 +250,12 @@ export default function AdminDashboard() {
                           <TableHead className="hidden md:table-cell">分类</TableHead>
                           <TableHead className="hidden md:table-cell">评分</TableHead>
                           <TableHead className="hidden md:table-cell">推荐</TableHead>
+                          <TableHead>排序</TableHead>
                           <TableHead className="text-right">操作</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {apps.map((app) => (
+                        {apps.map((app, appIndex) => (
                           <TableRow key={app.id}>
                             <TableCell>
                               <div className="flex items-center gap-3">
@@ -257,6 +272,14 @@ export default function AdminDashboard() {
                             <TableCell className="hidden md:table-cell">{app.rating}</TableCell>
                             <TableCell className="hidden md:table-cell">
                               {app.featured && <Badge className="gradient-bg">推荐</Badge>}
+                            </TableCell>
+                            <TableCell>
+                              <SortControls
+                                index={appIndex}
+                                total={apps.length}
+                                disabled={sorting}
+                                onMove={(dir) => handleAppSort(appIndex, dir)}
+                              />
                             </TableCell>
                             <TableCell className="text-right">
                               <div className="flex justify-end gap-1">

@@ -10,6 +10,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { Plus, Pencil, Trash2 } from "lucide-react";
+import SortControls from "@/components/SortControls";
+import { reorderItems } from "@/lib/reorder";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,8 +44,20 @@ export default function CategoryManagement() {
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState<CategoryFormData>(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [sorting, setSorting] = useState(false);
   const queryClient = useQueryClient();
   const { toast } = useToast();
+
+  const handleSort = async (index: number, direction: "up" | "down" | "top" | "bottom") => {
+    setSorting(true);
+    const { error } = await reorderItems("categories", categories.map(c => ({ id: c.id, sort_order: c.sort_order })), index, direction);
+    setSorting(false);
+    if (error) {
+      toast({ title: "排序失败", description: error, variant: "destructive" });
+    } else {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+    }
+  };
 
   const openCreate = () => {
     setEditing(false);
@@ -120,12 +134,13 @@ export default function CategoryManagement() {
                   <TableRow>
                     <TableHead>分类</TableHead>
                     <TableHead className="hidden md:table-cell">描述</TableHead>
-                    <TableHead className="hidden md:table-cell">应用数</TableHead>
-                    <TableHead className="text-right">操作</TableHead>
+                     <TableHead className="hidden md:table-cell">应用数</TableHead>
+                     <TableHead>排序</TableHead>
+                     <TableHead className="text-right">操作</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {categories.map((cat) => (
+                  {categories.map((cat, catIndex) => (
                     <TableRow key={cat.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
@@ -137,6 +152,14 @@ export default function CategoryManagement() {
                         {cat.description}
                       </TableCell>
                       <TableCell className="hidden md:table-cell">{cat.count}</TableCell>
+                      <TableCell>
+                        <SortControls
+                          index={catIndex}
+                          total={categories.length}
+                          disabled={sorting}
+                          onMove={(dir) => handleSort(catIndex, dir)}
+                        />
+                      </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-1">
                           <Button variant="ghost" size="icon" onClick={() => openEdit(cat)}>

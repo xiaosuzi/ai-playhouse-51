@@ -9,7 +9,7 @@ export function useCategories() {
   return useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("categories").select("*");
+      const { data, error } = await supabase.from("categories").select("*").order("sort_order", { ascending: true });
       if (error) throw error;
       return data as CategoryRow[];
     },
@@ -20,7 +20,7 @@ export function useApps() {
   return useQuery({
     queryKey: ["apps"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("apps").select("*");
+      const { data, error } = await supabase.from("apps").select("*").order("sort_order", { ascending: true });
       if (error) throw error;
       return data as AppRow[];
     },
@@ -34,7 +34,8 @@ export function useFeaturedApps() {
       const { data, error } = await supabase
         .from("apps")
         .select("*")
-        .eq("featured", true);
+        .eq("featured", true)
+        .order("sort_order", { ascending: true });
       if (error) throw error;
       return data as AppRow[];
     },
@@ -48,7 +49,8 @@ export function useAppsByCategory(categoryId: string | undefined) {
       const { data, error } = await supabase
         .from("apps")
         .select("*")
-        .eq("category", categoryId!);
+        .eq("category", categoryId!)
+        .order("sort_order", { ascending: true });
       if (error) throw error;
       return data as AppRow[];
     },
